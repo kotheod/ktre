@@ -12,8 +12,13 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 
+import os
+
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+#BASE_DIR = Path(__file__).resolve().parent.parent #my version not used
 
 
 # Quick-start development settings - unsuitable for production
@@ -31,12 +36,19 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'pages.apps.PagesConfig',
+    'listings.apps.ListingsConfig',
+    'realtors.apps.RealtorsConfig',
+    'accounts.apps.AccountsConfig',
+    'contacts.apps.ContactsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
+    'django.contrib.sites',
 ]
 
 MIDDLEWARE = [
@@ -54,7 +66,7 @@ ROOT_URLCONF = 'reproj.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR,'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -69,14 +81,25 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'reproj.wsgi.application'
 
+#for the allauth appplication
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+    # `allauth` specific authentication methods, such as login by e-mail
+    #'allauth.account.auth_backends.AuthenticationBackend',
+]
+
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres', #name of your database
+        'USER' : 'postgres', #the Owner in PGAdmin
+        'PASSWORD': 'Wgp90^#grk:>', #this is the master password 
+        'HOST': 'localhost',
     }
 }
 
@@ -115,9 +138,40 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
+#STATIC_ROOT when u run collect static in deployment it takes static files,
+#from your apps and puts it into a root static folder (and these are the ones that are actually used in deployment),
+#this is what u define below with STATIC_ROOT
+#So when u run python manage.py collectstatic it actually creates a new
+#folder in our root directory with all files.
+STATIC_ROOT=os.path.join(BASE_DIR,'static')
+STATIC_URL = '/static/'
+STATICFILES_DIRS=[
+    os.path.join(BASE_DIR,'reproj/static')
+]
+
+#Media folder settings
+MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+MEDIA_URL ='/media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#Messages
+from django.contrib.messages import constants as messages
+MESSAGE_TAGS ={
+    messages.ERROR: 'danger',
+}
+
+SITE_ID=1
+
+# #email configuration to send emails from a gmail account
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' #This prints email in the terminal instead of sending an email
+EMAIL_HOST = 'mail.oriontraining.eu' 
+EMAIL_USE_TLS=True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'info@oriontraining.eu' #your gmail
+EMAIL_HOST_PASSWORD='0r10nmailinfo' # gmail password
+
+
