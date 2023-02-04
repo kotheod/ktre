@@ -48,11 +48,11 @@ def register(request): #If POST, then register user and redirect, otherwise rend
                     user.save()
                     messages.success(request, 'You are now registered and can log in')
                     # Send welcome email
-                    email_subject = 'Welcome to KT Real Estate!'
-                    email_message = 'Thank you for registering in KT Real Estate. Login here: "www.try.com" '
-                    email_from = settings.EMAIL_HOST_USER
-                    recipient_list = [user.email, 'ktstoch@gmail.com']
-                    send_mail(email_subject, email_message, email_from, recipient_list, fail_silently=False)
+                    # email_subject = 'Welcome to KT Real Estate!'
+                    # email_message = 'Thank you for registering in KT Real Estate. Login here: "www.try.com" '
+                    # email_from = settings.EMAIL_HOST_USER
+                    # recipient_list = [user.email, 'ktstoch@gmail.com']
+                    # send_mail(email_subject, email_message, email_from, recipient_list, fail_silently=False)
                     return redirect('login')
         else:
             messages.error(request, 'Passwords do not match')
