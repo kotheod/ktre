@@ -188,6 +188,6 @@ EMAIL_HOST = 'mail.oriontraining.eu'
 EMAIL_USE_TLS=True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'info@oriontraining.eu' #your gmail
-EMAIL_HOST_PASSWORD='0r10nmailinfo' # gmail password
+EMAIL_HOST_PASSWORD='*********' # gmail password
 
 
